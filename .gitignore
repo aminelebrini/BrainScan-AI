@@ -6,3 +6,5 @@
 runs/*
 /results/*
 /data/splited_data.zip
+/models/yolo_best_v/*
+yolov8n.py
