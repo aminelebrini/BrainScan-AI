@@ -1,0 +1,6 @@
+train: /kaggle/input/datasets/aminelebrini/dataset-data/train/images
+val: /kaggle/input/datasets/aminelebrini/dataset-data/val/images
+test: /kaggle/input/datasets/aminelebrini/dataset-data/test/images
+
+nc: 4
+names: ['Glioma', 'Meningioma', 'NoTumor', 'Pituitary']

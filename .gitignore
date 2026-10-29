@@ -1,3 +1,8 @@
 /data/archive_irm.zip
 /data/extracted_data/*
 /data/splited_data/*
+/models/best_model/*
+/models/*
+runs/*
+/results/*
+/data/splited_data.zip

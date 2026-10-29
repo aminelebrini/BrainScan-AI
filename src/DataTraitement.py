@@ -1,7 +1,8 @@
 from pathlib import Path
 import zipfile
 from sklearn.model_selection import train_test_split
-# import tensorflow as tf
+import tensorflow as tf
+import numpy as np
 import os
 from PIL import Image
 class DataTraitement:
@@ -213,6 +214,58 @@ class DataTraitement:
                     destination_label_path.touch()
 
             print(f"Validation dataset split completed. {len(val_images)} images and labels saved to {val_images_path} and {val_labels_path}.")
+
+    def load_data_set(self, images_path, labels_path, batch_size=32, shuffle=True):
+
+        data_set = tf.data.Dataset.from_tensor_slices((images_path, labels_path))
+
+        if shuffle:
+            data_set = data_set.shuffle(buffer_size=len(images_path))
+
+        data_set = data_set.batch(batch_size)
+        data_set = data_set.prefetch(tf.data.AUTOTUNE)
+
+        return data_set
+    
+    def resize_and_normalize_image(self, images_path, target_size=(224, 224)):
+        class_names = ['Glioma', 'Meningioma', 'NoTumor', 'Pituitary']
+        labels_path = images_path.parent / "labels"
+        normalized_images = []
+        labels = []
+        for image_path in images_path.glob("*"):
+            if image_path.is_file() and image_path.suffix.lower() in [".jpg", ".jpeg", ".png"]:
+            
+                with Image.open(image_path) as img:
+                    img = img.convert("RGB")
+                    image = img.resize(target_size)
+                    image = np.array(image, dtype=np.float32) / 255.0
+            
+                label_file = labels_path / f"{image_path.stem}.txt"
+            
+                if label_file.exists():
+                 with open(label_file, 'r') as f:
+                        line = f.readline().strip()
+                        if line:
+                       
+                            class_id = int(float(line.split()[0]))
+                        
+                            normalized_images.append(image)
+                            labels.append(class_id)
+                else:
+                    print(f"Warning: Label file for {image_path.name} not found!")
+
+        return np.array(normalized_images, dtype=np.float32), np.array(labels, dtype=np.int32)
+
+    def data_augmentation(self, images):
+            Data_augmentation = tf.keras.Sequential([
+                tf.keras.layers.RandomFlip("horizontal_and_vertical"),
+                tf.keras.layers.RandomRotation(0.2),
+                tf.keras.layers.RandomZoom(0.1),
+            ])
+
+            augmented_images = images.map(lambda x, y: (Data_augmentation(x), y), num_parallel_calls=tf.data.AUTOTUNE)
+
+            return augmented_images
 
         
 
