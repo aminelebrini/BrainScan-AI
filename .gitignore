@@ -8,3 +8,10 @@ runs/*
 /data/splited_data.zip
 /models/yolo_best_v/*
 yolov8n.py
+
+# Keep the inference assets used by the application versioned.
+!/models/ModelBuilder.py
+!/results/visualizations/
+!/results/visualizations/*.json
+!/results/visualizations/*.png
+!/results/visualizations/*.csv

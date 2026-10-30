@@ -154,16 +154,16 @@ def main():
 
     # print("Starting Object Detection using YOLOv8 !")
 
-    # model = model_builder.build_yolo_model()
+    model = model_builder.build_yolo_model()
 
-    # model.train(
-    #     data="data.yaml",
-    #     epochs=30,
-    #     batch=16,
-    #     imgsz=640,
-    #     device="cpu",
-    #     name="models/yolo_best_v"
-    # )
+    model.train(
+        data="data.yaml",
+        epochs=30,
+        batch=16,
+        imgsz=640,
+        device="cpu",
+        name="models/yolo_best_v"
+    )
 
     # model = model_builder.validate_yolo_model("models/yolo_best_v/weights/best.pt")
     # metrics = model.val(data="data.yaml", split="test", device=0)
